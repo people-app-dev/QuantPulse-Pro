@@ -1,0 +1,19 @@
+@import '/styles/design-tokens.wxss';
+.page { padding: var(--space-lg); min-height: 100vh; }
+.header { margin-bottom: var(--space-lg); }
+.title { font-size: 34px; font-weight: 700; color: var(--color-text-primary); letter-spacing: -0.5px; }
+.subtitle { font-size: var(--font-body); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+.market-card { background: var(--color-card); border-radius: var(--radius-card); padding: var(--space-lg); margin-bottom: var(--space-md); }
+.market-info { display: flex; justify-content: space-between; align-items: center; }
+.market-name { font-size: var(--font-caption); color: var(--color-text-secondary); }
+.market-value { font-size: 18px; font-weight: 600; color: var(--color-text-primary); }
+.market-change.up { font-size: var(--font-body); color: var(--color-success); }
+.entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+.entry-card { background: var(--color-card); border-radius: var(--radius-card); padding: var(--space-lg); text-align: center; }
+.entry-label { font-size: var(--font-body); font-weight: 600; color: var(--color-text-primary); display: block; }
+.entry-desc { font-size: var(--font-caption); color: var(--color-text-secondary); margin-top: var(--space-xs); display: block; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); font-size: var(--font-body); font-weight: 600; color: var(--color-text-secondary); }
+.link { color: var(--color-primary); font-size: var(--font-caption); }
+.post-list { display: flex; flex-direction: column; gap: var(--space-sm); }
+.post-preview { background: var(--color-card); border-radius: var(--radius-card); padding: var(--space-md); }
+.empty { text-align: center; color: var(--color-text-secondary); font-size: var(--font-caption); padding: var(--space-xl); }

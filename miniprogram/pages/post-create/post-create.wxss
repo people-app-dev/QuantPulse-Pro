@@ -1,0 +1,2 @@
+@import '/styles/design-tokens.wxss';
+.page { padding: var(--space-lg); }

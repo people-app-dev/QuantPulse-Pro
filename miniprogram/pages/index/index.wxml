@@ -1,0 +1,29 @@
+<view class="page">
+  <view class="header">
+    <text class="title">理财</text>
+    <text class="subtitle">今日市场概览</text>
+  </view>
+  <view class="market-card">
+    <view class="market-info">
+      <text class="market-name">{{marketIndex.name}}</text>
+      <text class="market-value">{{marketIndex.value}}</text>
+      <text class="market-change up">{{marketIndex.change}}</text>
+    </view>
+  </view>
+  <view class="entry-grid">
+    <view class="entry-card" wx:for="{{entries}}" wx:key="type" bindtap="onEntryTap" data-type="{{item.type}}">
+      <text class="entry-label">{{item.label}}</text>
+      <text class="entry-desc">{{item.desc}}</text>
+    </view>
+  </view>
+  <view class="section-header">
+    <text>社区动态</text>
+    <text class="link" bindtap="onViewAll">全部</text>
+  </view>
+  <view class="post-list">
+    <view wx:if="{{posts.length === 0}}" class="empty">暂无动态</view>
+    <view wx:for="{{posts}}" wx:key="_id" class="post-preview">
+      <text>{{item.content}}</text>
+    </view>
+  </view>
+</view>
