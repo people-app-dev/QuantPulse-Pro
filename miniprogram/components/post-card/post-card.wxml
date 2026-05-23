@@ -1,0 +1,20 @@
+<view class="post-card" bindtap="onTap">
+  <view class="post-header">
+    <image class="avatar" src="{{post.userAvatar || '/images/default-avatar.png'}}" mode="aspectFill" />
+    <view class="post-meta">
+      <text class="user-name">{{post.userName || '用户'}}</text>
+      <text class="post-time">{{post.createdAt}}</text>
+    </view>
+  </view>
+  <text class="post-content">{{post.content}}</text>
+  <view class="post-images" wx:if="{{post.images && post.images.length}}">
+    <image wx:for="{{post.images}}" wx:key="index" src="{{item}}" mode="aspectFill" class="post-image" />
+  </view>
+  <view class="post-tags" wx:if="{{post.tags && post.tags.length}}">
+    <text class="tag" wx:for="{{post.tags}}" wx:key="*this">{{item}}</text>
+  </view>
+  <view class="post-actions">
+    <text class="action" catchtap="onLike">❤ {{post.likes || 0}}</text>
+    <text class="action">💬 {{post.comments || 0}}</text>
+  </view>
+</view>
