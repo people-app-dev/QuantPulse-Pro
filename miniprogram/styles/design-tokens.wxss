@@ -1,0 +1,33 @@
+/* miniprogram/styles/design-tokens.wxss */
+page {
+  --color-primary: #007AFF;
+  --color-primary-dark: #0056CC;
+  --color-bg: #F2F2F7;
+  --color-card: #FFFFFF;
+  --color-text-primary: #000000;
+  --color-text-body: #3C3C43;
+  --color-text-secondary: #8E8E93;
+  --color-border: #E5E5EA;
+  --color-success: #34C759;
+
+  --font-title: 28px;
+  --font-headline: 17px;
+  --font-body: 14px;
+  --font-caption: 12px;
+  --font-small: 10px;
+
+  --radius-card: 12px;
+  --radius-button: 10px;
+  --radius-tag: 8px;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+
+  background-color: var(--color-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  color: var(--color-text-body);
+  font-size: var(--font-body);
+}
