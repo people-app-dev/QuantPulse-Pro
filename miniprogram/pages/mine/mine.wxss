@@ -1,2 +1,15 @@
 @import '/styles/design-tokens.wxss';
-.page { padding: var(--space-lg); }
+.page { padding: var(--space-lg); min-height: 100vh; }
+.profile-header { display: flex; align-items: center; gap: var(--space-md); background: var(--color-card); border-radius: var(--radius-card); padding: var(--space-lg); margin-bottom: var(--space-md); }
+.avatar { width: 56px; height: 56px; border-radius: 28px; background: #e0e0e0; }
+.profile-info { flex: 1; }
+.nickname { font-size: 17px; font-weight: 600; color: var(--color-text-primary); }
+.investor-type { font-size: var(--font-caption); color: var(--color-primary); margin-top: var(--space-xs); display: block; }
+.stats-row { display: flex; background: var(--color-card); border-radius: var(--radius-card); margin-bottom: var(--space-md); }
+.stat-item { flex: 1; text-align: center; padding: var(--space-lg); }
+.stat-value { font-size: 20px; font-weight: 700; color: var(--color-primary); display: block; }
+.stat-label { font-size: var(--font-small); color: var(--color-text-secondary); margin-top: var(--space-xs); display: block; }
+.menu-list { background: var(--color-card); border-radius: var(--radius-card); overflow: hidden; }
+.menu-item { display: flex; justify-content: space-between; padding: var(--space-lg); font-size: var(--font-body); border-bottom: 1px solid var(--color-bg); }
+.menu-item:last-child { border-bottom: none; }
+.arrow { color: var(--color-border); font-size: 18px; }
