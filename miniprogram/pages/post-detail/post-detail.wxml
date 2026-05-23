@@ -1,1 +1,20 @@
-<view class="page"><text>帖子详情</text></view>
+<view class="page">
+  <view class="post-detail" wx:if="{{post}}">
+    <text class="post-content">{{post.content}}</text>
+    <view class="post-images" wx:if="{{post.images && post.images.length}}">
+      <image wx:for="{{post.images}}" wx:key="index" src="{{item}}" mode="aspectFill" class="post-image" />
+    </view>
+  </view>
+  <view class="comments-section">
+    <text class="section-title">评论 ({{comments.length}})</text>
+    <view class="comment" wx:for="{{comments}}" wx:key="_id">
+      <text class="comment-content">{{item.content}}</text>
+      <text class="comment-time">{{item.createdAt}}</text>
+    </view>
+    <view wx:if="{{comments.length === 0}}" class="empty">暂无评论</view>
+  </view>
+  <view class="comment-bar">
+    <input class="comment-input" placeholder="写评论..." value="{{commentInput}}" bindinput="onCommentInput" />
+    <button class="send-btn" bindtap="onSubmitComment">发送</button>
+  </view>
+</view>

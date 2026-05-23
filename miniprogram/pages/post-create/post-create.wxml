@@ -1,1 +1,17 @@
-<view class="page"><text>发布动态</text></view>
+<view class="page">
+  <textarea class="content-input" placeholder="写一段投资心得..." value="{{content}}" bindinput="onContentInput" maxlength="500" />
+  <view class="image-grid">
+    <view class="image-item" wx:for="{{images}}" wx:key="index">
+      <image src="{{item}}" mode="aspectFill" />
+      <view class="remove-btn" bindtap="onRemoveImage" data-index="{{index}}">✕</view>
+    </view>
+    <view class="image-add" wx:if="{{images.length < maxImages}}" bindtap="onChooseImage">+</view>
+  </view>
+  <view class="tag-section">
+    <text class="section-label">选择话题</text>
+    <view class="tag-grid">
+      <text class="tag {{selectedTags.indexOf(item) >= 0 ? 'active' : ''}}" wx:for="{{tags}}" wx:key="*this" bindtap="onTagToggle" data-tag="{{item}}">{{item}}</text>
+    </view>
+  </view>
+  <button class="submit-btn" bindtap="onSubmit">发布</button>
+</view>
