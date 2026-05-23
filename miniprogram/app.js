@@ -9,6 +9,11 @@ App({
         traceUser: true,
       });
     }
+
+    wx.cloud.callFunction({ name: 'login' }).then((res) => {
+      this.globalData.openid = res.result.openid;
+      this.globalData.userInfo = res.result.user;
+    }).catch(console.error);
   },
 
   globalData: {
