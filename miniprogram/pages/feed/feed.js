@@ -8,7 +8,12 @@ Page({
     loading: false,
   },
 
-  onShow() { this.fetchPosts(); },
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 });
+    }
+    this.fetchPosts();
+  },
 
   fetchPosts() {
     this.setData({ loading: true });

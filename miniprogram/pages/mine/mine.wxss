@@ -5,6 +5,9 @@
 .profile-info { flex: 1; }
 .nickname { font-size: 17px; font-weight: 600; color: var(--color-text-primary); }
 .investor-type { font-size: var(--font-caption); color: var(--color-primary); margin-top: var(--space-xs); display: block; }
+.investor-type.empty { color: var(--color-text-secondary); }
+.refresh-btn { margin-top: var(--space-sm); }
+.refresh-text { font-size: var(--font-small); color: var(--color-primary); }
 .stats-row { display: flex; background: var(--color-card); border-radius: var(--radius-card); margin-bottom: var(--space-md); }
 .stat-item { flex: 1; text-align: center; padding: var(--space-lg); }
 .stat-value { font-size: 20px; font-weight: 700; color: var(--color-primary); display: block; }

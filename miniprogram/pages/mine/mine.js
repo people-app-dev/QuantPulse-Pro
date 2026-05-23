@@ -9,7 +9,12 @@ Page({
     ],
   },
 
-  onShow() { this.loadProfile(); },
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 3 });
+    }
+    this.loadProfile();
+  },
 
   loadProfile() {
     wx.cloud.callFunction({ name: 'getUserProfile' }).then((res) => {
@@ -29,6 +34,23 @@ Page({
         data: { nickname: e.detail.userInfo.nickName },
       });
     }
+  },
+
+  onRefreshLogin() {
+    wx.showLoading({ title: '登录中' });
+    wx.cloud.callFunction({ name: 'login' }).then((res) => {
+      wx.hideLoading();
+      if (res && res.result && res.result.user) {
+        this.setData({ userInfo: res.result.user });
+        wx.showToast({ title: '登录成功', icon: 'success' });
+      } else {
+        wx.showToast({ title: '请检查云函数是否已部署', icon: 'none', duration: 3000 });
+      }
+    }).catch((err) => {
+      wx.hideLoading();
+      console.error('登录失败:', err);
+      wx.showToast({ title: '登录失败，请部署云函数', icon: 'none', duration: 3000 });
+    });
   },
 
   onMenuTap(e) {

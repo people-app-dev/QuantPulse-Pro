@@ -11,9 +11,15 @@
     </view>
   </view>
   <view class="entry-grid">
-    <view class="entry-card" wx:for="{{entries}}" wx:key="type" bindtap="onEntryTap" data-type="{{item.type}}">
-      <text class="entry-label">{{item.label}}</text>
-      <text class="entry-desc">{{item.desc}}</text>
+    <view class="entry-card" bindtap="onEntryTap" data-type="quiz">
+      <image class="entry-icon" src="{{iconQuiz}}" />
+      <text class="entry-label">风险评估</text>
+      <text class="entry-desc">了解你的投资偏好</text>
+    </view>
+    <view class="entry-card" bindtap="onEntryTap" data-type="allocation">
+      <image class="entry-icon" src="{{iconAlloc}}" />
+      <text class="entry-label">资产配置</text>
+      <text class="entry-desc">查看你的配置方案</text>
     </view>
   </view>
   <view class="section-header">

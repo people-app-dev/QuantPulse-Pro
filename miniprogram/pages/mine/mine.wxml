@@ -2,8 +2,12 @@
   <view class="profile-header">
     <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" />
     <view class="profile-info">
-      <text class="nickname">{{userInfo.nickname || '点击设置昵称'}}</text>
+      <text class="nickname">{{userInfo.nickname || '用户'}}</text>
       <text class="investor-type" wx:if="{{userInfo.investorType}}">{{userInfo.investorType}}</text>
+      <text class="investor-type empty" wx:else>未测评</text>
+    </view>
+    <view class="refresh-btn" bindtap="onRefreshLogin">
+      <text class="refresh-text">重试登录</text>
     </view>
   </view>
 

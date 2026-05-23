@@ -10,6 +10,7 @@
 .market-change.up { font-size: var(--font-body); color: var(--color-success); }
 .entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-bottom: var(--space-lg); }
 .entry-card { background: var(--color-card); border-radius: var(--radius-card); padding: var(--space-lg); text-align: center; }
+.entry-icon { width: 28px; height: 28px; margin-bottom: var(--space-sm); }
 .entry-label { font-size: var(--font-body); font-weight: 600; color: var(--color-text-primary); display: block; }
 .entry-desc { font-size: var(--font-caption); color: var(--color-text-secondary); margin-top: var(--space-xs); display: block; }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); font-size: var(--font-body); font-weight: 600; color: var(--color-text-secondary); }
