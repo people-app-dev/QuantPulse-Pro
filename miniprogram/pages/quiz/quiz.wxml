@@ -1,1 +1,64 @@
-<view class="page"><text>风险评估</text></view>
+<view class="page">
+  <block wx:if="{{!completed}}">
+    <view class="quiz-header">
+      <text class="progress-label">第 {{currentIndex + 1}} 题 / 共 {{totalQuestions}} 题</text>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width:{{progress}}%"></view>
+      </view>
+    </view>
+
+    <view class="question-card">
+      <text class="question-text">{{currentQuestion.text}}</text>
+    </view>
+
+    <view class="options-list">
+      <view
+        class="option {{selectedOption === index ? 'selected' : ''}}"
+        wx:for="{{currentQuestion.options}}"
+        wx:key="label"
+        data-score="{{item.score}}"
+        data-index="{{index}}"
+        bindtap="onOptionTap"
+      >
+        <text class="option-label">{{item.label}}</text>
+        <text class="option-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <view class="quiz-nav">
+      <text class="nav-btn {{currentIndex === 0 ? 'disabled' : ''}}" bindtap="prevQuestion">上一题</text>
+      <text class="nav-btn" bindtap="nextQuestion">跳过</text>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="result-page">
+      <text class="result-type">{{result.investorType}}</text>
+      <text class="result-desc">重视资产安全，但愿意为长期收益承担适度风险</text>
+
+      <view class="result-score">
+        <text class="score-label">风险评分</text>
+        <text class="score-value">{{result.riskScore}}<text class="score-unit">/100</text></text>
+      </view>
+
+      <view class="allocation-section">
+        <text class="section-title">建议配置</text>
+        <view class="allocation-bar" wx:for="{{result.allocation}}" wx:key="name">
+          <view class="bar-header">
+            <text>{{item.name}}</text>
+            <text>{{item.pct}}%</text>
+          </view>
+          <view class="bar-track">
+            <view class="bar-fill" style="width:{{item.pct}}%;background:{{item.color}}"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="result-meta">
+        <text>预期年化波动：{{result.expectedVolatility}}</text>
+      </view>
+
+      <button class="retake-btn" bindtap="onRetake">重新测评</button>
+    </view>
+  </block>
+</view>
