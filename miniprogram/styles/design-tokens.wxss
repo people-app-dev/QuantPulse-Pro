@@ -9,6 +9,7 @@ page {
   --color-text-secondary: #8E8E93;
   --color-border: #E5E5EA;
   --color-success: #34C759;
+  --color-danger: #FF3B30;
 
   --font-title: 28px;
   --font-headline: 17px;

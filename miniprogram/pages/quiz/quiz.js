@@ -93,6 +93,9 @@ Page({
     const result = calculateResult(this.data.answers);
     this.setData({ completed: true, progress: 100, result });
     this.saveResult(result);
+    wx.navigateTo({
+      url: `/pages/quiz-result/quiz-result?type=${encodeURIComponent(result.investorType)}&score=${result.riskScore}&allocation=${encodeURIComponent(JSON.stringify(result.allocation))}`
+    });
   },
 
   saveResult(result) {

@@ -13,7 +13,7 @@
 
     <view class="options-list">
       <view
-        class="option {{selectedOption === index ? 'selected' : ''}}"
+        class="option {{selectedOption == index ? 'selected' : ''}}"
         wx:for="{{currentQuestion.options}}"
         wx:key="label"
         data-score="{{item.score}}"
@@ -26,7 +26,7 @@
     </view>
 
     <view class="quiz-nav">
-      <text class="nav-btn {{currentIndex === 0 ? 'disabled' : ''}}" bindtap="prevQuestion">上一题</text>
+      <text class="nav-btn {{currentIndex == 0 ? 'disabled' : ''}}" bindtap="prevQuestion">上一题</text>
       <text class="nav-btn" bindtap="nextQuestion">跳过</text>
     </view>
   </block>

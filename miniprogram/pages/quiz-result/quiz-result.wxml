@@ -1,1 +1,25 @@
-<view class="page"><text>测评结果</text></view>
+<view class="page">
+  <view class="result-card">
+    <text class="result-title">测评结果</text>
+    <view class="result-type-row">
+      <text class="result-type">{{investorType}}</text>
+    </view>
+    <view class="result-score-row">
+      <text class="result-score">{{riskScore}}</text>
+      <text class="result-unit">分</text>
+    </view>
+    <view class="risk-bar">
+      <view class="risk-fill" style="width: {{riskScore}}%;"></view>
+    </view>
+  </view>
+
+  <view class="allocation-card" wx:if="{{allocation.length}}">
+    <text class="section-title">建议资产配置</text>
+    <view class="alloc-item" wx:for="{{allocation}}" wx:key="name">
+      <text class="alloc-name">{{item.name}}</text>
+      <text class="alloc-pct">{{item.pct}}%</text>
+    </view>
+  </view>
+
+  <button class="sim-btn" bindtap="onStartSimulation">开始投资模拟</button>
+</view>

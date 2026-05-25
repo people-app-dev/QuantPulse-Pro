@@ -3,29 +3,30 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
 exports.main = async (event) => {
-  const wxContext = cloud.getWXContext();
-  const openid = wxContext.OPENID;
+  try {
+    const wxContext = cloud.getWXContext();
+    const openid = wxContext.OPENID;
+    const { answers, dimensions, riskScore, investorType, allocation } = event;
 
-  const { answers, dimensions, riskScore, investorType, allocation } = event;
+    const result = await db.collection('assessments').add({
+      data: {
+        userId: openid,
+        answers,
+        dimensions,
+        riskScore,
+        investorType,
+        allocation,
+        createdAt: db.serverDate(),
+      },
+    });
 
-  const result = await db.collection('assessments').add({
-    data: {
-      userId: openid,
-      answers,
-      dimensions,
-      riskScore,
-      investorType,
-      allocation,
-      createdAt: db.serverDate(),
-    },
-  });
+    await db.collection('users').where({ openid }).update({
+      data: { investorType, riskScore },
+    });
 
-  await db.collection('users').where({ openid }).update({
-    data: {
-      investorType,
-      riskScore,
-    },
-  });
-
-  return { id: result._id };
+    return { id: result._id, success: true };
+  } catch (err) {
+    console.error('saveAssessment error:', err);
+    return { success: false, error: err.message };
+  }
 };

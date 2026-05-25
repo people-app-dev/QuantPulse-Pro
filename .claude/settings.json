@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"/c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64/resources/native-binary/claude.exe\" --version)",
+      "Bash(\"/c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64/resources/native-binary/claude.exe\" --help)",
+      "Bash(powershell.exe -Command \"Get-MpPreference | Select-Object -Property EnableControlledFolderAccess\")",
+      "Bash(powershell.exe -Command \"Get-MpPreference | Select-Object -Property DisableRealtimeMonitoring, DisableBehaviorMonitoring, DisableIntrusionPreventionSystem, DisableIOAVProtection\")",
+      "Bash(code --list-extensions)",
+      "Bash(ls -la \"/c/Program Files/ClaudeCode/.claude/skills/\" 2>&1)",
+      "Read(//c/Program Files/ClaudeCode/.claude/**)",
+      "Bash(ls -la \"/c/Users/lenovo/.claude/ide/\" 2>&1)",
+      "Read(//c/Users/lenovo/.claude/ide//**)",
+      "Bash(rm -f \"/c/Users/lenovo/.claude/ide/25653.lock\" 2>&1 && echo \"锁文件已删除\" || echo \"删除失败\")",
+      "Bash(rm -f \"/c/Users/lenovo/.claude/ide/\"*.lock 2>&1 && echo \"所有锁文件已删除\")",
+      "Read(//c/Users/lenovo/.claude/**)",
+      "Bash(file \"/c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64/resources/native-binary/claude.exe\" 2>&1)",
+      "Read(//c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64/resources/native-binary/**)",
+      "Bash(find \"/c/Users/lenovo/AppData/Local/Temp/claude\" -type f 2>&1 | head -20)",
+      "Read(//c/Users/lenovo/AppData/Local/Temp/claude/**)",
+      "Bash(curl -s -w '\\\\nHTTP_CODE:%{http_code}\\\\nTIME:%{time_total}s\\\\n' --connect-timeout 10 --max-time 30 https://api.deepseek.com/anthropic/v1/messages -H 'Content-Type: application/json' -H 'Authorization: Bearer sk-ee9fa5d5a1ca4826a0fdd752d5b9a1b6' -d '{\"model\":\"deepseek-v4-pro\",\"max_tokens\":10,\"messages\":[{\"role\":\"user\",\"content\":\"Say hi\"}]}')",
+      "Bash(env)",
+      "Bash(grep -r \"CLAUDE_CODE_ENTRYPOINT\\\\|claude-vscode\\\\|useTerminal\\\\|TERMINAL\" \"/c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64/\" --include=\"*.json\" 2>&1 | head -10)",
+      "Read(//c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64//**)",
+      "Read(//c/Users/lenovo/**)",
+      "Bash(/c/Windows/System32/cmd.exe //c \"where claude 2>&1\")",
+      "Bash(/c/Windows/System32/cmd.exe //c \"echo hi | \\\\\"C:\\\\\\\\Users\\\\\\\\lenovo\\\\\\\\.vscode\\\\\\\\extensions\\\\\\\\anthropic.claude-code-2.1.145-win32-x64\\\\\\\\resources\\\\\\\\native-binary\\\\\\\\claude.exe\\\\\" --print \\\\\"say OK\\\\\" 2>&1\")",
+      "Bash(\"/c/Users/lenovo/.vscode/extensions/anthropic.claude-code-2.1.145-win32-x64/resources/native-binary/claude.exe\" --print \"say OK\")",
+      "Bash(pip install *)",
+      "Bash(python -c ' *)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\lenovo\\.claude\\ide"
+    ]
+  }
+}

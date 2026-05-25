@@ -1,0 +1,47 @@
+@import '/styles/design-tokens.wxss';
+
+.page { padding: var(--space-lg); min-height: 100vh; padding-bottom: 100px; }
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.card-title { font-size: var(--font-headline); font-weight: 600; color: var(--color-text-primary); display: block; }
+.card-label { font-size: var(--font-caption); color: var(--color-text-secondary); display: block; margin-bottom: var(--space-xs); }
+.card-desc { font-size: var(--font-body); color: var(--color-text-secondary); display: block; margin: var(--space-sm) 0 var(--space-md); }
+
+.primary-btn {
+  width: 100%;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-button);
+  font-size: var(--font-body);
+  padding: 10px;
+  margin-top: var(--space-md);
+}
+
+.retake-btn {
+  width: 100%;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-button);
+  font-size: var(--font-small);
+  padding: 6px;
+  margin-top: var(--space-sm);
+}
+
+.risk-row { display: flex; justify-content: space-between; align-items: baseline; }
+.risk-type { font-size: 22px; font-weight: 700; color: var(--color-primary); }
+.risk-score { font-size: var(--font-headline); font-weight: 600; color: var(--color-text-primary); }
+
+.sim-overview { display: flex; gap: var(--space-md); margin: var(--space-md) 0; }
+.sim-stat { flex: 1; text-align: center; }
+.sim-stat-value { font-size: 22px; font-weight: 700; color: var(--color-text-primary); display: block; }
+.sim-stat-label { font-size: var(--font-small); color: var(--color-text-secondary); }
+
+.sim-empty { margin: var(--space-md) 0; }
+.sim-empty-text { font-size: var(--font-body); color: var(--color-text-secondary); }

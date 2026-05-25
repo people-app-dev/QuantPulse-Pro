@@ -1,60 +1,66 @@
-const { getPostsCollection } = require('../../utils/api');
-const { icons, toDataUri } = require('../../utils/icons');
-
 Page({
   data: {
-    marketIndex: { name: '上证指数', value: '3,258.63', change: '+0.82%' },
-    iconQuiz: '',
-    iconAlloc: '',
-    posts: [],
-    allocation: null,
-  },
-
-  onLoad() {
-    this.setData({
-      iconQuiz: toDataUri(icons.quiz(false)),
-      iconAlloc: toDataUri(icons.allocation(false)),
-    });
+    brief: null,
+    loading: true,
+    error: '',
   },
 
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
     }
-    this.fetchPosts();
-    this.fetchAllocation();
+    this.fetchBrief();
   },
 
-  fetchPosts() {
-    getPostsCollection()
-      .orderBy('createdAt', 'desc')
-      .limit(3)
-      .get()
-      .then((res) => {
-        this.setData({ posts: res.data });
-      })
-      .catch((err) => {
-        console.error('Failed to fetch posts:', err);
-      });
+  onPullDownRefresh() {
+    this.fetchBrief(true);
   },
 
-  fetchAllocation() {
-    wx.cloud.callFunction({ name: 'getAssessments' }).then((res) => {
-      if (res.result.assessments && res.result.assessments.length > 0) {
-        const latest = res.result.assessments[0];
-        this.setData({ allocation: latest.allocation || null });
+  fetchBrief(forceRefresh) {
+    this.setData({ loading: true, error: '' });
+    wx.cloud.callFunction({
+      name: 'getMarketBrief',
+      data: { force: forceRefresh || false },
+    }).then((res) => {
+      if (res.result && res.result.brief) {
+        const brief = res.result.brief;
+        // Format forex object into array for iteration
+        if (brief.forex && !Array.isArray(brief.forex)) {
+          brief.forex = Object.values(brief.forex);
+        }
+        // Format updateTime
+        if (brief.updateTime) {
+          const d = new Date(brief.updateTime);
+          brief.updateTime = d.getHours().toString().padStart(2, '0') + ':' +
+            d.getMinutes().toString().padStart(2, '0');
+        }
+        this.setData({ brief, loading: false });
+      } else {
+        this.setData({
+          loading: false,
+          error: (res.result && res.result.error) || '获取简报失败',
+        });
       }
+      wx.stopPullDownRefresh();
     }).catch((err) => {
-      console.error('Failed to fetch allocation:', err);
+      console.error('获取简报失败:', err);
+      this.setData({
+        loading: false,
+        error: '网络错误，请下拉刷新重试',
+      });
+      wx.stopPullDownRefresh();
     });
   },
 
-  onEntryTap(e) {
-    const type = e.currentTarget.dataset.type;
-    if (type === 'quiz') wx.switchTab({ url: '/pages/quiz/quiz' });
+  onRefresh() {
+    this.fetchBrief(true);
   },
 
-  onViewAll() {
-    wx.switchTab({ url: '/pages/feed/feed' });
+  onShareAppMessage() {
+    return { title: 'QPP - 全球市场简报', path: '/pages/index/index' };
+  },
+
+  onShareTimeline() {
+    return { title: 'QPP - 全球市场简报' };
   },
 });

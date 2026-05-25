@@ -16,18 +16,43 @@ App({
       traceUser: true,
     });
 
-    wx.cloud.callFunction({ name: 'login' }).then((res) => {
-      if (res && res.result) {
-        this.globalData.openid = res.result.openid || null;
-        this.globalData.userInfo = res.result.user || null;
-      }
-    }).catch((err) => {
-      console.error('登录失败，请检查云函数是否已部署:', err);
-      wx.showToast({
-        title: '登录失败，请部署云函数',
-        icon: 'none',
-        duration: 3000,
-      });
+    // Enable share menu
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline'],
+    });
+
+    this.doLogin();
+  },
+
+  doLogin() {
+    wx.login({
+      success: (loginRes) => {
+        if (!loginRes.code) {
+          console.error('wx.login 失败: 未获取到 code');
+          return;
+        }
+        wx.cloud.callFunction({
+          name: 'login',
+          data: { code: loginRes.code },
+        }).then((res) => {
+          if (res && res.result) {
+            // Only store user info, never expose openid to UI
+            this.globalData.userInfo = res.result.user || null;
+            this.globalData.openid = res.result.openid || null;
+          }
+        }).catch((err) => {
+          console.error('登录失败:', err);
+          wx.showModal({
+            title: '登录失败',
+            content: '错误: ' + (err.errMsg || err.message || JSON.stringify(err)),
+            showCancel: false,
+          });
+        });
+      },
+      fail: (err) => {
+        console.error('wx.login 调用失败:', err);
+      },
     });
   },
 

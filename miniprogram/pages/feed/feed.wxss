@@ -1,8 +1,0 @@
-@import '/styles/design-tokens.wxss';
-.page { padding: var(--space-lg); min-height: 100vh; padding-bottom: 80px; }
-.tag-scroll { white-space: nowrap; margin-bottom: var(--space-md); padding: var(--space-xs) 0; }
-.tag-chip { display: inline-block; padding: 4px 12px; margin-right: 8px; border-radius: 12px; font-size: var(--font-caption); background: var(--color-card); color: var(--color-text-secondary); }
-.tag-chip.active { background: var(--color-primary); color: #fff; }
-.post-list { display: flex; flex-direction: column; }
-.empty { text-align: center; color: var(--color-text-secondary); font-size: var(--font-caption); padding: var(--space-xl); }
-.fab { position: fixed; bottom: 80px; right: 20px; width: 48px; height: 48px; border-radius: 24px; background: var(--color-primary); color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,122,255,0.3); }

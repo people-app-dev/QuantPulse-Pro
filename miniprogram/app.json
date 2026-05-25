@@ -1,12 +1,12 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/invest/invest",
+    "pages/mine/mine",
     "pages/quiz/quiz",
     "pages/quiz-result/quiz-result",
-    "pages/feed/feed",
-    "pages/post-create/post-create",
-    "pages/post-detail/post-detail",
-    "pages/mine/mine"
+    "pages/simulation/simulation",
+    "pages/calculator/calculator"
   ],
   "window": {
     "navigationBarTitleText": "QPP",
@@ -23,15 +23,11 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页"
+        "text": "市场"
       },
       {
-        "pagePath": "pages/quiz/quiz",
-        "text": "测评"
-      },
-      {
-        "pagePath": "pages/feed/feed",
-        "text": "社区"
+        "pagePath": "pages/invest/invest",
+        "text": "投资"
       },
       {
         "pagePath": "pages/mine/mine",

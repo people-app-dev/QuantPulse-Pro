@@ -8,8 +8,8 @@
   >
     <image
       class="tab-icon"
-      src="{{selected === index ? iconUris[item.icon].on : iconUris[item.icon].off}}"
+      src="{{selected == index ? iconUris[item.icon].on : iconUris[item.icon].off}}"
     />
-    <text class="tab-text {{selected === index ? 'active' : ''}}">{{item.text}}</text>
+    <text class="tab-text {{selected == index ? 'active' : ''}}">{{item.text}}</text>
   </view>
 </view>

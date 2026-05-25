@@ -5,9 +5,8 @@ Component({
     selected: 0,
     iconUris: {},
     list: [
-      { pagePath: '/pages/index/index', text: '首页', icon: 'home' },
-      { pagePath: '/pages/quiz/quiz', text: '测评', icon: 'quiz' },
-      { pagePath: '/pages/feed/feed', text: '社区', icon: 'feed' },
+      { pagePath: '/pages/index/index', text: '市场', icon: 'home' },
+      { pagePath: '/pages/invest/invest', text: '投资', icon: 'invest' },
       { pagePath: '/pages/mine/mine', text: '我的', icon: 'mine' },
     ],
   },

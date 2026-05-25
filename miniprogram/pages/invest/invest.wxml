@@ -1,0 +1,40 @@
+<view class="page">
+  <view class="card" wx:if="{{!hasAssessment}}">
+    <text class="card-title">风险测评</text>
+    <text class="card-desc">完成风险测评，了解你的投资风险偏好，开启模拟投资之旅</text>
+    <button class="primary-btn" bindtap="onGoQuiz">开始测评</button>
+  </view>
+
+  <block wx:else>
+    <view class="card risk-summary">
+      <text class="card-label">我的风险画像</text>
+      <view class="risk-row">
+        <text class="risk-type">{{investorType}}</text>
+        <text class="risk-score">{{riskScore}}分</text>
+      </view>
+      <button class="retake-btn" bindtap="onGoQuiz">重新测评</button>
+    </view>
+
+    <view class="card sim-card">
+      <text class="card-title">投资模拟盘</text>
+      <view wx:if="{{hasSimulation && simData}}" class="sim-overview">
+        <view class="sim-stat">
+          <text class="sim-stat-value">{{simData.totalAssets}}</text>
+          <text class="sim-stat-label">总资产</text>
+        </view>
+        <view class="sim-stat">
+          <text class="sim-stat-value">{{simData.cash}}</text>
+          <text class="sim-stat-label">可用资金</text>
+        </view>
+        <view class="sim-stat">
+          <text class="sim-stat-value">{{simData.holdingCount}}</text>
+          <text class="sim-stat-label">持仓数</text>
+        </view>
+      </view>
+      <view wx:else class="sim-empty">
+        <text class="sim-empty-text">尚未开通模拟账户</text>
+      </view>
+      <button class="primary-btn" bindtap="onGoSimulation">进入模拟盘</button>
+    </view>
+  </block>
+</view>
