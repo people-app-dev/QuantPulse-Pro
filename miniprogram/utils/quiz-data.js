@@ -113,6 +113,27 @@ const questions = [
   },
 ];
 
+var TYPE_ALLOCATIONS = {
+  '保守型': [
+    { name: '货币基金', pct: 50, color: '#007AFF' },
+    { name: '债券基金', pct: 30, color: '#5856D6' },
+    { name: '指数基金', pct: 10, color: '#FF9500' },
+    { name: '现金储备', pct: 10, color: '#FF3B30' },
+  ],
+  '稳健型': [
+    { name: '货币基金', pct: 30, color: '#007AFF' },
+    { name: '指数基金', pct: 40, color: '#FF9500' },
+    { name: '债券基金', pct: 20, color: '#5856D6' },
+    { name: '现金储备', pct: 10, color: '#FF3B30' },
+  ],
+  '进取型': [
+    { name: '指数基金', pct: 50, color: '#FF9500' },
+    { name: '货币基金', pct: 15, color: '#007AFF' },
+    { name: '债券基金', pct: 20, color: '#5856D6' },
+    { name: '现金储备', pct: 15, color: '#FF3B30' },
+  ],
+};
+
 function calculateResult(answers) {
   const dimScores = { risk: 0, knowledge: 0, liquidity: 0, term: 0 };
   const dimCounts = { risk: 0, knowledge: 0, liquidity: 0, term: 0 };
@@ -144,27 +165,6 @@ function calculateResult(answers) {
   else if (overall <= 66) investorType = '稳健型';
   else investorType = '进取型';
 
-  const allocations = {
-    '保守型': [
-      { name: '货币基金', pct: 50, color: '#007AFF' },
-      { name: '债券基金', pct: 30, color: '#5856D6' },
-      { name: '指数基金', pct: 10, color: '#FF9500' },
-      { name: '现金储备', pct: 10, color: '#FF3B30' },
-    ],
-    '稳健型': [
-      { name: '货币基金', pct: 30, color: '#007AFF' },
-      { name: '指数基金', pct: 40, color: '#FF9500' },
-      { name: '债券基金', pct: 20, color: '#5856D6' },
-      { name: '现金储备', pct: 10, color: '#FF3B30' },
-    ],
-    '进取型': [
-      { name: '指数基金', pct: 50, color: '#FF9500' },
-      { name: '货币基金', pct: 15, color: '#007AFF' },
-      { name: '债券基金', pct: 20, color: '#5856D6' },
-      { name: '现金储备', pct: 15, color: '#FF3B30' },
-    ],
-  };
-
   const expectedVolatility = {
     '保守型': '2% - 5%',
     '稳健型': '5% - 10%',
@@ -175,9 +175,45 @@ function calculateResult(answers) {
     dimensions,
     riskScore: overall,
     investorType,
-    allocation: allocations[investorType],
+    allocation: TYPE_ALLOCATIONS[investorType],
     expectedVolatility: expectedVolatility[investorType],
   };
 }
 
-module.exports = { questions, calculateResult };
+var typeAdvice = {
+  '保守型': {
+    advice: [
+      '投资策略：保守型投资者追求本金安全，适合以低风险产品为主构建投资组合。建议将大部分资金配置在货币基金和债券基金中，确保现金流稳定。',
+      '产品推荐：优先选择货币基金（如余额宝类产品）、国债、高等级信用债基金以及银行大额存单。风险资产占比建议控制在10%-15%以内。',
+      '风险管理：避免追涨杀跌，严格控制高波动资产的仓位。设立止损线，单个产品的亏损超过5%时应考虑减仓。每季度审视一次投资组合。',
+      '投资周期：以1-3年的中短期配置为主，保持充足的流动性。建议预留3-6个月生活费的现金储备，不投入任何有风险的产品。'
+    ],
+    principles: ['安全第一，收益第二', '保持充足的现金流', '严格控制风险资产比例', '定期定额，规避择时风险'],
+    suitable: ['货币基金（余额宝类）', '国债及政策性金融债', '高等级信用债基金', '银行大额存单', '保本型理财产品'],
+    avoid: ['个股投资', '股票型基金（仓位>20%）', '期货、期权等衍生品', '高收益债券（垃圾债）', '数字货币']
+  },
+  '稳健型': {
+    advice: [
+      '投资策略：稳健型投资者在控制风险的前提下追求资产增值，适合采用"核心+卫星"策略。核心仓位配置在指数基金和债券基金中，卫星仓位可适度介入主动管理型基金。',
+      '产品推荐：宽基指数基金（如沪深300、中证500ETF）、混合型基金、可转债基金、REITs等。建议采用定投方式逐步建仓，平均持仓成本。',
+      '风险管理：股债比例建议维持在6:4到4:6之间，根据市场估值动态调整。单只产品仓位不超过总资产的20%。每半年全面复盘一次。',
+      '投资周期：建议以3-5年的中长期视角进行资产配置。短期内不需要动用的资金可配置在偏股型产品中，取得更好的长期回报。'
+    ],
+    principles: ['核心稳健，卫星进取', '坚持定投，平滑波动', '股债平衡，动态调整', '分散配置，降低相关性', '长期持有，减少交易'],
+    suitable: ['宽基指数基金（沪深300、中证500ETF）', '混合型基金（股债平衡型）', '可转债基金', 'REITs', '黄金ETF'],
+    avoid: ['单一重仓个股', '杠杆产品（分级B、期货）', '流动性差的私募产品', '无止损的策略性交易']
+  },
+  '进取型': {
+    advice: [
+      '投资策略：进取型投资者愿意承担较高波动以追求超额回报。建议在宽基指数基金的基础上，叠加行业主题基金和优质个股，构建攻守兼备的组合。',
+      '产品推荐：行业ETF（科技、新能源、半导体）、主动管理型股票基金、QDII基金（全球配置）、可转债、以及少量个股。可适度使用趋势跟踪策略。',
+      '风险管理：设定硬止损线——单只产品亏损15%以上必须重新评估。整体组合最大回撤控制在25%以内。每季度进行压力测试，模拟极端市场环境。',
+      '投资周期：建议以5年以上的长期维度进行规划。利用复利效应，将分红和收益再投资。短期市场波动是正常现象，避免因情绪化操作而偏离长期策略。'
+    ],
+    principles: ['长期复利，价值投资', '高收益伴随高波动', '严格止损，控制最大回撤', '全球化配置分散风险', '持续学习，提升认知'],
+    suitable: ['行业ETF（科技、新能源、半导体）', '主动管理型股票基金', 'QDII基金（美股、港股）', '优质个股（蓝筹及成长股）', '可转债及可交换债'],
+    avoid: ['无止损的主观交易', '高杠杆衍生品', '概念炒作和短期投机', '流动性枯竭的小盘股', '未经验证的投资策略']
+  }
+};
+
+module.exports = { questions, calculateResult, typeAdvice, TYPE_ALLOCATIONS };

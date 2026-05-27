@@ -10,7 +10,7 @@ exports.main = async (event) => {
   try {
     const https = require('https');
     const data = await new Promise((resolve, reject) => {
-      const url = `https://searchapi.eastmoney.com/bussiness/web/1111?keyword=${encodeURIComponent(keyword)}&client=web&count=20`;
+      const url = `https://searchapi.eastmoney.com/api/suggest/get?input=${encodeURIComponent(keyword)}&type=14&token=D43BF722C8E33BDC906FB84D85E326E8&count=20`;
       https.get(url, (res) => {
         let body = '';
         res.on('data', chunk => body += chunk);
@@ -21,11 +21,11 @@ exports.main = async (event) => {
       }).on('error', reject);
     });
 
-    const stocks = (data.Data || []).map(item => ({
+    const stocks = (data.QuotationCodeTable?.Data || []).map(item => ({
       code: item.Code,
       name: item.Name,
       market: item.Market,
-      fullCode: (item.Market === 'SH' ? 'sh' : 'sz') + item.Code
+      fullCode: (item.Market === 'SH' || item.Market === '0' ? 'sh' : 'sz') + item.Code
     }));
 
     return { success: true, data: stocks };

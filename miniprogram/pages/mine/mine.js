@@ -1,116 +1,127 @@
+var quizData = require('../../utils/quiz-data');
+
+function getPhone() {
+  return wx.getStorageSync('accountPhone') || '';
+}
+
+function maskPhone(phone) {
+  if (!phone || phone.length !== 11) return phone;
+  return phone.slice(0, 3) + '****' + phone.slice(7);
+}
+
 Page({
   data: {
     userInfo: {},
-    menuItems: [],
-    simOverview: null,
+    accountPhone: '',
+    phoneDisplay: '',
+    assessmentCount: 0,
+    investorType: '',
+    riskScore: 0,
+    allocation: [],
+    expectedVolatility: '',
+    typeDetail: null,
   },
 
-  onLoad() {
-    this.setData({
-      menuItems: [
-        { key: 'simulation', label: '我的模拟盘' },
-        { key: 'calculator', label: '理财计算器' },
-      ],
-    });
-  },
-
-  onShow() {
+  onShow: function () {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 });
     }
+    var phone = getPhone();
+    this.setData({ accountPhone: phone, phoneDisplay: maskPhone(phone) });
     this.loadProfile();
-    this.loadSimOverview();
+    this.loadAssessmentCount();
   },
 
-  loadProfile() {
-    wx.cloud.callFunction({ name: 'getUserProfile' }).then((res) => {
-      this.setData({ userInfo: res.result.user || {} });
-    }).catch(console.error);
+  loadProfile: function () {
+    var self = this;
+    var phone = getPhone();
+    wx.cloud.callFunction({
+      name: 'getUserProfile',
+      data: { phone: phone },
+    }).then(function (res) {
+      var user = res.result.user || {};
+      var invType = user.investorType || '';
+      var score = user.riskScore || 0;
+      var alloc = quizData.TYPE_ALLOCATIONS[invType] || [];
+      self.setData({
+        userInfo: user,
+        investorType: invType,
+        riskScore: score,
+        allocation: alloc,
+        typeDetail: quizData.typeAdvice[invType] || null,
+      });
+    }).catch(function () {});
   },
 
-  loadSimOverview() {
-    wx.cloud.callFunction({ name: 'getSimulation' }).then((res) => {
-      if (res.result.success && res.result.data) {
-        const sim = res.result.data;
-        if (sim.holdings && sim.holdings.length) {
-          const codes = sim.holdings.map(h => h.code);
-          wx.cloud.callFunction({ name: 'getStockPrice', data: { codes } }).then((priceRes) => {
-            if (priceRes.result.success) {
-              const priceMap = {};
-              priceRes.result.data.forEach(p => priceMap[p.code] = p.price);
-              let marketValue = 0, totalCost = 0;
-              sim.holdings.forEach(h => {
-                const p = priceMap[h.code] || h.costPrice;
-                marketValue += p * h.shares;
-                totalCost += h.costPrice * h.shares;
-              });
-              this.setData({
-                simOverview: {
-                  totalAssets: (sim.cash + marketValue).toFixed(2),
-                  totalProfit: (marketValue - totalCost).toFixed(2),
-                  totalProfitPercent: totalCost > 0 ? ((marketValue - totalCost) / totalCost * 100).toFixed(2) : '0.00',
-                }
-              });
-            }
-          }).catch(() => {});
-        } else {
-          this.setData({
-            simOverview: {
-              totalAssets: sim.cash.toFixed(2),
-              totalProfit: '0.00',
-              totalProfitPercent: '0.00',
-            }
-          });
-        }
+  loadAssessmentCount: function () {
+    var self = this;
+    var phone = getPhone();
+    wx.cloud.callFunction({
+      name: 'getAssessments',
+      data: { phone: phone },
+    }).then(function (res) {
+      if (res.result && res.result.assessments) {
+        self.setData({ assessmentCount: res.result.assessments.length });
       }
-    }).catch(() => {});
+    }).catch(function () {});
   },
 
-  onChooseAvatar(e) {
-    const avatarUrl = e.detail.avatarUrl;
+  onChooseAvatar: function (e) {
+    var self = this;
+    var avatarUrl = e.detail.avatarUrl;
     wx.showLoading({ title: '上传中' });
     wx.cloud.uploadFile({
       cloudPath: 'avatars/' + Date.now() + '.png',
       filePath: avatarUrl,
-    }).then((uploadRes) => {
+    }).then(function (uploadRes) {
       wx.hideLoading();
       return wx.cloud.callFunction({
         name: 'getUserProfile',
-        data: { avatar: uploadRes.fileID },
+        data: { avatar: uploadRes.fileID, phone: getPhone() },
       });
-    }).then(() => {
-      this.setData({ 'userInfo.avatar': avatarUrl });
-    }).catch((err) => {
+    }).then(function () {
+      self.setData({ 'userInfo.avatar': avatarUrl });
+    }).catch(function (err) {
       wx.hideLoading();
       console.error('头像上传失败:', err);
       wx.showToast({ title: '头像上传失败', icon: 'none' });
     });
   },
 
-  onNicknameBlur(e) {
-    const nickname = e.detail.value;
-    if (!nickname || nickname === this.data.userInfo.nickname) return;
+  onNicknameBlur: function (e) {
+    var self = this;
+    var nickname = e.detail.value;
+    if (!nickname || nickname === self.data.userInfo.nickname) return;
     wx.cloud.callFunction({
       name: 'getUserProfile',
-      data: { nickname },
-    }).then(() => {
-      this.setData({ 'userInfo.nickname': nickname });
-    }).catch(console.error);
+      data: { nickname: nickname, phone: getPhone() },
+    }).then(function () {
+      self.setData({ 'userInfo.nickname': nickname });
+    }).catch(function (err) { console.error(err); });
   },
 
-  onMenuTap(e) {
-    const key = e.currentTarget.dataset.key;
-    if (key === 'simulation') {
-      wx.navigateTo({ url: '/pages/simulation/simulation' });
-    } else if (key === 'calculator') {
-      wx.navigateTo({ url: '/pages/calculator/calculator' });
+  onMenuTap: function (e) {
+    var key = e.currentTarget.dataset.key;
+    if (key === 'quiz') {
+      wx.navigateTo({ url: '/pages/quiz/quiz' });
+    } else if (key === 'result') {
+      var alloc = quizData.TYPE_ALLOCATIONS[this.data.investorType] || [];
+      getApp().globalData.quizResult = {
+        type: this.data.investorType,
+        score: this.data.riskScore,
+        allocation: alloc,
+      };
+      wx.navigateTo({ url: '/pages/quiz-result/quiz-result?type=1' });
+    } else if (key === 'logout') {
+      this.onLogout();
     }
   },
 
-  onRefreshLogin() {
+  onRefreshLogin: function () {
+    var self = this;
     wx.showLoading({ title: '登录中' });
     wx.login({
-      success: (loginRes) => {
+      success: function (loginRes) {
         if (!loginRes.code) {
           wx.hideLoading();
           wx.showToast({ title: '获取登录凭证失败', icon: 'none' });
@@ -119,10 +130,11 @@ Page({
         wx.cloud.callFunction({
           name: 'login',
           data: { code: loginRes.code },
-        }).then((res) => {
+        }).then(function (res) {
           wx.hideLoading();
           if (res && res.result && res.result.user) {
-            this.setData({ userInfo: res.result.user });
+            self.setData({ userInfo: res.result.user });
+            self.loadAssessmentCount();
             wx.showToast({ title: '登录成功', icon: 'success' });
           } else {
             wx.showModal({
@@ -131,7 +143,7 @@ Page({
               showCancel: false,
             });
           }
-        }).catch((err) => {
+        }).catch(function (err) {
           wx.hideLoading();
           console.error('登录失败:', err);
           wx.showModal({
@@ -141,7 +153,7 @@ Page({
           });
         });
       },
-      fail: (err) => {
+      fail: function (err) {
         wx.hideLoading();
         console.error('wx.login 失败:', err);
         wx.showToast({ title: '微信登录调用失败', icon: 'none' });
@@ -149,7 +161,30 @@ Page({
     });
   },
 
-  onShareAppMessage() {
+  onGoLogin: function () {
+    wx.reLaunch({ url: '/pages/login/login' });
+  },
+
+  onLogout: function () {
+    var self = this;
+    wx.showModal({
+      title: '退出登录',
+      content: '退出后不会删除数据，您可以使用相同手机号重新登录。',
+      confirmText: '退出',
+      success: function (res) {
+        if (res.confirm) {
+          wx.removeStorageSync('accountPhone');
+          var app = getApp();
+          app.globalData.accountPhone = '';
+          app.globalData.userInfo = null;
+          self.setData({ userInfo: {}, investorType: '', riskScore: 0, allocation: [], typeDetail: null });
+          wx.reLaunch({ url: '/pages/login/login' });
+        }
+      },
+    });
+  },
+
+  onShareAppMessage: function () {
     return { title: 'QPP - 你的智能理财助手', path: '/pages/index/index' };
   },
 });

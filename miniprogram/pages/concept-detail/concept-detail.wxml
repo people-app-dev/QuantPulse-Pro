@@ -1,0 +1,42 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="loading-card">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading && concept}}">
+    <view class="header-card {{categoryClass}}">
+      <text class="header-badge">{{concept.category}}</text>
+      <text class="header-title">{{concept.concept}}</text>
+      <text class="header-subtitle">{{concept.short}}</text>
+    </view>
+
+    <view class="detail-card">
+      <text class="section-label">详细解释</text>
+      <text wx:if="{{concept.detail}}" class="detail-text">{{concept.detail}}</text>
+      <view wx:elif="{{detailLoading}}" class="detail-loading">
+        <text class="loading-text">加载中...</text>
+      </view>
+      <view wx:else class="detail-empty">
+        <text class="empty-detail-text">暂无详细解释，请尝试搜索「{{concept.concept}}」查看更多信息</text>
+      </view>
+    </view>
+
+    <view wx:if="{{concept.tags && concept.tags.length > 0}}" class="tags-card">
+      <text class="section-label">相关标签</text>
+      <view class="tags-row">
+        <text class="tag-chip" wx:for="{{concept.tags}}" wx:key="*this">{{item}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{relatedConcepts.length > 0}}" class="related-section">
+      <text class="section-headline">相关概念</text>
+      <view class="related-grid">
+        <view class="related-card" wx:for="{{relatedConcepts}}" wx:key="id" bindtap="onRelatedTap" data-id="{{item.id}}">
+          <text class="related-badge {{item.category == '股票' ? 'cat-stock' : item.category == '基金' ? 'cat-fund' : item.category == '债券' ? 'cat-bond' : item.category == '宏观' ? 'cat-macro' : 'cat-finance'}}">{{item.category}}</text>
+          <text class="related-title">{{item.concept}}</text>
+          <text class="related-desc">{{item.short}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -16,48 +16,40 @@ App({
       traceUser: true,
     });
 
-    // Enable share menu
     wx.showShareMenu({
       withShareTicket: true,
       menus: ['shareAppMessage', 'shareTimeline'],
     });
 
-    this.doLogin();
-  },
+    var phone = wx.getStorageSync('accountPhone');
+    if (phone) {
+      this.globalData.accountPhone = phone;
+    }
 
-  doLogin() {
-    wx.login({
-      success: (loginRes) => {
-        if (!loginRes.code) {
-          console.error('wx.login 失败: 未获取到 code');
-          return;
-        }
-        wx.cloud.callFunction({
-          name: 'login',
-          data: { code: loginRes.code },
-        }).then((res) => {
-          if (res && res.result) {
-            // Only store user info, never expose openid to UI
-            this.globalData.userInfo = res.result.user || null;
-            this.globalData.openid = res.result.openid || null;
-          }
-        }).catch((err) => {
-          console.error('登录失败:', err);
-          wx.showModal({
-            title: '登录失败',
-            content: '错误: ' + (err.errMsg || err.message || JSON.stringify(err)),
-            showCancel: false,
-          });
+    // Privacy authorization (WeChat base library >= 2.32.3)
+    if (wx.onNeedPrivacyAuthorization) {
+      wx.onNeedPrivacyAuthorization(function (resolve) {
+        wx.showModal({
+          title: '隐私授权',
+          content: '为了提供账号登录和个人数据管理服务，我们需要获取您的手机号码等信息。请阅读并同意《用户协议》和《隐私政策》。',
+          confirmText: '同意',
+          cancelText: '不同意',
+          success: function (res) {
+            if (res.confirm) {
+              resolve({ event: 'agree', buttonId: 'agree' });
+            } else {
+              resolve({ event: 'disagree' });
+            }
+          },
         });
-      },
-      fail: (err) => {
-        console.error('wx.login 调用失败:', err);
-      },
-    });
+      });
+    }
   },
 
   globalData: {
     userInfo: null,
     openid: null,
+    accountPhone: '',
+    searchTopic: '',
   },
 });

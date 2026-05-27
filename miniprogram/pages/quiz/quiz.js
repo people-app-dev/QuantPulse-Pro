@@ -10,6 +10,7 @@ Page({
     progress: 0,
     completed: false,
     result: null,
+    typeDetail: null,
   },
 
   onShow() {
@@ -30,6 +31,7 @@ Page({
       progress: 0,
       completed: false,
       result: null,
+      typeDetail: null,
       currentQuestion: questions[0],
     });
   },
@@ -91,17 +93,22 @@ Page({
 
   finishQuiz() {
     const result = calculateResult(this.data.answers);
-    this.setData({ completed: true, progress: 100, result });
-    this.saveResult(result);
-    wx.navigateTo({
-      url: `/pages/quiz-result/quiz-result?type=${encodeURIComponent(result.investorType)}&score=${result.riskScore}&allocation=${encodeURIComponent(JSON.stringify(result.allocation))}`
+    const { typeAdvice } = require('../../utils/quiz-data');
+    this.setData({
+      completed: true,
+      progress: 100,
+      result: result,
+      typeDetail: typeAdvice[result.investorType] || null,
     });
+    this.saveResult(result);
   },
 
   saveResult(result) {
+    var phone = wx.getStorageSync('accountPhone') || '';
     wx.cloud.callFunction({
       name: 'saveAssessment',
       data: {
+        phone: phone,
         answers: this.data.answers,
         dimensions: result.dimensions,
         riskScore: result.riskScore,

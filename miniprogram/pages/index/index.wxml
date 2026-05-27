@@ -9,9 +9,10 @@
   </view>
 
   <block wx:if="{{!loading && brief}}">
-    <view class="brief-card">
+    <view class="brief-card" bindtap="onBriefTap">
       <text class="brief-label">今日简报</text>
       <text class="brief-summary">{{brief.summary}}</text>
+      <text class="brief-tap-hint">点击查看详情 ›</text>
     </view>
 
     <view class="section">
@@ -20,7 +21,7 @@
         <view class="forex-item" wx:for="{{brief.forex}}" wx:key="pair">
           <text class="forex-pair">{{item.pair}}</text>
           <text class="forex-rate">{{item.rate}}</text>
-          <text class="forex-change {{item.change.indexOf('-') == 0 ? 'down' : 'up'}}">{{item.change}}</text>
+          <text class="forex-change {{item.isUp ? 'up' : 'down'}}">{{item.change}}</text>
         </view>
       </view>
     </view>
@@ -31,7 +32,7 @@
         <view class="index-item" wx:for="{{brief.indices}}" wx:key="name">
           <text class="index-name">{{item.name}}</text>
           <text class="index-value">{{item.value}}</text>
-          <text class="index-change {{item.change.indexOf('-') == 0 ? 'down' : 'up'}}">{{item.change}}</text>
+          <text class="index-change {{item.isUp ? 'up' : 'down'}}">{{item.change}}</text>
         </view>
       </view>
     </view>
@@ -39,9 +40,10 @@
     <view class="section">
       <text class="section-title">市场要闻</text>
       <view class="highlight-list">
-        <view class="highlight-item" wx:for="{{brief.highlights}}" wx:key="*this">
+        <view class="highlight-item" wx:for="{{brief.highlights}}" wx:key="title" bindtap="onHighlightTap" data-index="{{index}}">
           <text class="highlight-dot">●</text>
-          <text class="highlight-text">{{item}}</text>
+          <text class="highlight-text">{{item.summary || item}}</text>
+          <text class="highlight-arrow">›</text>
         </view>
       </view>
     </view>
@@ -49,6 +51,9 @@
     <view class="update-info">
       <text class="update-text">更新于 {{brief.updateTime || '--'}}</text>
       <text class="refresh-link" bindtap="onRefresh">刷新</text>
+    </view>
+    <view class="disclaimer-row">
+      <text class="disclaimer-text">{{brief.source ? brief.source.disclaimer : '以上内容仅供参考，不构成投资建议。市场有风险，投资需谨慎。'}}</text>
     </view>
   </block>
 

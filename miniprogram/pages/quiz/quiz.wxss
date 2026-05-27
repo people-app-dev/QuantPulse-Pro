@@ -1,11 +1,13 @@
 @import '/styles/design-tokens.wxss';
 
-.page { padding: var(--space-lg); min-height: 100vh; }
+page { background-color: var(--color-bg); }
+
+.page { background-color: var(--color-bg); padding: var(--space-lg); min-height: 100vh; }
 
 .quiz-header { margin-bottom: var(--space-xl); }
 .progress-label { font-size: var(--font-caption); color: var(--color-text-secondary); }
 .progress-bar { height: 3px; background: var(--color-border); border-radius: 1.5px; margin-top: var(--space-sm); }
-.progress-fill { height: 3px; background: var(--color-primary); border-radius: 1.5px; transition: width 0.3s ease; }
+.progress-fill { height: 3px; background: var(--color-primary); border-radius: 1.5px; }
 
 .question-card { margin-bottom: var(--space-xl); }
 .question-text { font-size: 17px; font-weight: 600; color: var(--color-text-primary); line-height: 1.4; }
@@ -36,7 +38,43 @@
 .allocation-bar { margin-bottom: var(--space-sm); }
 .bar-header { display: flex; justify-content: space-between; font-size: var(--font-body); margin-bottom: var(--space-xs); }
 .bar-track { height: 5px; background: var(--color-border); border-radius: 2.5px; }
-.bar-fill { height: 5px; border-radius: 2.5px; transition: width 0.5s ease; }
+.bar-fill { height: 5px; border-radius: 2.5px; }
 
 .result-meta { font-size: var(--font-caption); color: var(--color-text-secondary); margin-bottom: var(--space-lg); }
-.retake-btn { background: var(--color-primary); color: white; border-radius: var(--radius-button); font-size: var(--font-body); padding: var(--space-md); border: none; width: 100%; }
+
+.advice-section {
+  background: var(--color-card);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+.advice-subhead {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+.advice-para { margin-bottom: 10px; }
+.advice-para-text { font-size: 14px; color: var(--color-text-body); line-height: 1.6; }
+.advice-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.advice-tag {
+  background: rgba(0,122,255,0.08);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--color-primary);
+}
+.tag-green { background: rgba(52,199,89,0.08); color: #34C759; }
+.tag-red { background: rgba(255,59,48,0.08); color: #FF3B30; }
+.section-heading {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.retake-btn { margin-top: 12px; background: var(--color-primary); color: white; border-radius: var(--radius-button); font-size: var(--font-body); padding: var(--space-md); border: none; width: 100%; }

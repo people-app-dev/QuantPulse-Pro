@@ -1,0 +1,65 @@
+<view class="page">
+  <view class="brand">
+    <text class="brand-name">QPP</text>
+    <text class="brand-sub">智能理财助手</text>
+  </view>
+
+  <!-- Mode tabs -->
+  <view class="mode-tabs">
+    <view class="mode-tab {{mode == 'login' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="login">
+      <text>登录</text>
+    </view>
+    <view class="mode-tab {{mode == 'register' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="register">
+      <text>注册</text>
+    </view>
+  </view>
+
+  <!-- WeChat one-tap (login mode only) -->
+  <view class="card" wx:if="{{mode == 'login'}}">
+    <button class="wechat-btn" open-type="getPhoneNumber" bindgetphonenumber="onGetPhoneNumber">
+      <text class="wechat-icon">💬</text>
+      <text class="wechat-text">微信一键登录</text>
+    </button>
+
+    <view class="sep-row">
+      <view class="sep-line"></view>
+      <text class="sep-label">或使用账号密码</text>
+      <view class="sep-line"></view>
+    </view>
+  </view>
+
+  <!-- Form card -->
+  <view class="card form-card">
+    <!-- Phone -->
+    <view class="field-row">
+      <text class="field-prefix">+86</text>
+      <view class="field-divider"></view>
+      <input class="field-input" type="number" maxlength="11" placeholder="手机号" value="{{phone}}" bindinput="onPhoneInput" />
+    </view>
+
+    <!-- Password -->
+    <view class="field-row">
+      <input class="field-input" type="text" password placeholder="{{mode == 'register' ? '设置密码' : '密码'}}" value="{{password}}" bindinput="onPasswordInput" maxlength="20" />
+    </view>
+
+    <!-- Confirm password (register mode only) -->
+    <view class="field-row" wx:if="{{mode == 'register'}}">
+      <input class="field-input" type="text" password placeholder="确认密码" value="{{confirmPassword}}" bindinput="onConfirmInput" maxlength="20" />
+    </view>
+  </view>
+
+  <!-- Action button -->
+  <button class="action-btn" bindtap="onSubmit" disabled="{{!canSubmit}}">
+    <text>{{mode == 'register' ? '注册' : '登录'}}</text>
+  </button>
+
+  <view class="footer">
+    <text class="skip-link" bindtap="onSkip">暂不登录，先看看</text>
+    <text class="footer-text" style="margin-top: 16px;">登录即表示同意</text>
+    <view class="footer-links">
+      <text class="footer-link" bindtap="onShowUserAgreement">《用户协议》</text>
+      <text class="footer-link" bindtap="onShowPrivacyPolicy">《隐私政策》</text>
+    </view>
+    <text class="footer-text">不同手机号对应独立的账户数据</text>
+  </view>
+</view>

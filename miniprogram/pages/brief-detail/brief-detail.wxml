@@ -1,0 +1,97 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="loading-card">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading && brief}}">
+    <view class="hero-card">
+      <text class="hero-tag">市场简报</text>
+      <text class="hero-title">全球市场日报</text>
+      <view class="hero-meta">
+        <text class="hero-date">{{brief.date}}</text>
+        <text class="hero-time">更新于 {{brief.updateTime || '--'}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{takeaways.length > 0}}" class="takeaways-card">
+      <text class="section-label">核心要点</text>
+      <view class="takeaway-item" wx:for="{{takeaways}}" wx:key="*this">
+        <view class="takeaway-dot"></view>
+        <text class="takeaway-text">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <text class="section-label">市场综述</text>
+      <view class="analysis-sections">
+        <view class="analysis-section" wx:for="{{sections}}" wx:key="header">
+          <text wx:if="{{item.header}}" class="analysis-header">{{item.header}}</text>
+          <text class="analysis-body">{{item.body}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-header-row">
+        <text class="section-label">市场要闻</text>
+        <text class="toggle-btn" bindtap="onToggleAll">{{expandAll ? '收起全部' : '展开全部'}}</text>
+      </view>
+      <view
+        class="highlight-card {{activeHighlight == index || expandAll ? 'expanded' : ''}}"
+        wx:for="{{brief.highlights}}"
+        wx:key="title"
+        data-index="{{index}}"
+        bindtap="onHighlightTap"
+      >
+        <view class="highlight-header">
+          <text class="highlight-num">{{item.index < 10 ? '0' + item.index : item.index}}</text>
+          <text class="highlight-title">{{item.title}}</text>
+          <text class="highlight-arrow {{activeHighlight == index || expandAll ? 'rotated' : ''}}">›</text>
+        </view>
+        <text class="highlight-summary">{{item.summary}}</text>
+        <view wx:if="{{activeHighlight == index || expandAll}}" class="highlight-detail">
+          <view class="detail-divider"></view>
+          <text class="detail-text">{{item.detail}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="data-grid">
+      <view class="data-card">
+        <text class="data-label">主要汇率</text>
+        <view class="forex-item" wx:for="{{brief.forex}}" wx:key="pair">
+          <view class="forex-left">
+            <text class="forex-pair">{{item.pair}}</text>
+          </view>
+          <view class="forex-right">
+            <text class="forex-rate">{{item.rate}}</text>
+            <text class="forex-change {{item.isUp ? 'up' : 'down'}}">{{item.change}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="data-card">
+        <text class="data-label">全球指数</text>
+        <view class="index-item" wx:for="{{brief.indices}}" wx:key="name">
+          <text class="index-name">{{item.name}}</text>
+          <view class="index-right">
+            <text class="index-value">{{item.value}}</text>
+            <text class="index-change {{item.isUp ? 'up' : 'down'}}">{{item.change}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{brief.relatedTopics && brief.relatedTopics.length > 0}}" class="topics-card">
+      <text class="section-label">相关主题</text>
+      <view class="topics-scroll">
+        <text class="topic-chip" wx:for="{{brief.relatedTopics}}" wx:key="*this" bindtap="onTopicTap" data-topic="{{item}}">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="footer">
+      <text class="footer-source">{{brief.source ? brief.source.provider : 'QPP市场研究'}} · 仅供参考，不构成投资建议</text>
+      <text class="footer-disclaimer">{{brief.source ? brief.source.disclaimer : ''}}</text>
+    </view>
+  </block>
+</view>

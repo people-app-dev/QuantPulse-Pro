@@ -28,6 +28,20 @@ Page({
         if (brief.forex && !Array.isArray(brief.forex)) {
           brief.forex = Object.values(brief.forex);
         }
+        brief.forex.forEach(item => {
+          item.isUp = item.change && item.change.indexOf('-') != 0;
+        });
+        brief.indices.forEach(item => {
+          item.isUp = item.change && item.change.indexOf('-') != 0;
+        });
+        brief.highlights = brief.highlights.map(h => {
+          if (typeof h === 'string') return { title: h, summary: h, detail: h };
+          return h;
+        });
+        // Ensure date ends with 日 (safety net for old cached data)
+        if (brief.date && !brief.date.endsWith('日')) {
+          brief.date += '日';
+        }
         // Format updateTime
         if (brief.updateTime) {
           const d = new Date(brief.updateTime);
@@ -54,6 +68,15 @@ Page({
 
   onRefresh() {
     this.fetchBrief(true);
+  },
+
+  onBriefTap() {
+    wx.navigateTo({ url: '/pages/brief-detail/brief-detail' });
+  },
+
+  onHighlightTap(e) {
+    const idx = e.currentTarget.dataset.index;
+    wx.navigateTo({ url: '/pages/brief-detail/brief-detail?highlight=' + idx });
   },
 
   onShareAppMessage() {

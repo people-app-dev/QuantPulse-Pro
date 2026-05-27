@@ -6,11 +6,13 @@ exports.main = async (event) => {
   try {
     const wxContext = cloud.getWXContext();
     const openid = wxContext.OPENID;
+    const phone = event.phone || '';
+    const userId = phone || openid;
     const { answers, dimensions, riskScore, investorType, allocation } = event;
 
     const result = await db.collection('assessments').add({
       data: {
-        userId: openid,
+        userId,
         answers,
         dimensions,
         riskScore,
@@ -20,9 +22,15 @@ exports.main = async (event) => {
       },
     });
 
-    await db.collection('users').where({ openid }).update({
-      data: { investorType, riskScore },
-    });
+    if (phone) {
+      await db.collection('users').where({ phone }).update({
+        data: { investorType, riskScore },
+      });
+    } else {
+      await db.collection('users').where({ openid }).update({
+        data: { investorType, riskScore },
+      });
+    }
 
     return { id: result._id, success: true };
   } catch (err) {

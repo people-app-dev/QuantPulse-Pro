@@ -3,36 +3,39 @@ Page({
     investorType: '',
     riskScore: 0,
     allocation: [],
+    typeDetail: null,
   },
 
-  onLoad(options) {
-    if (options.type && options.score) {
-      const allocation = JSON.parse(decodeURIComponent(options.allocation || '[]'));
-      this.setData({
-        investorType: options.type,
-        riskScore: parseInt(options.score) || 0,
-        allocation,
-      });
+  onLoad: function (options) {
+    var quizData = require('../../utils/quiz-data');
+    var typeAdvice = quizData.typeAdvice;
+    var TYPE_ALLOCATIONS = quizData.TYPE_ALLOCATIONS;
+
+    var app = getApp();
+    var result = app.globalData.quizResult || {};
+    var type = result.type || options.type || '';
+    var score = result.score || parseInt(options.score) || 0;
+    var allocation = result.allocation;
+
+    if (!allocation || !allocation.length) {
+      allocation = TYPE_ALLOCATIONS[type] || [];
     }
-  },
 
-  onStartSimulation() {
-    wx.showLoading({ title: '开通中' });
-    wx.cloud.callFunction({ name: 'initSimulation' }).then((res) => {
-      wx.hideLoading();
-      if (res.result && res.result.success) {
-        wx.switchTab({ url: '/pages/invest/invest' });
-      } else {
-        wx.showToast({ title: '开通失败', icon: 'none' });
-      }
-    }).catch((err) => {
-      wx.hideLoading();
-      console.error('initSimulation error:', err);
-      wx.showToast({ title: '开通失败', icon: 'none' });
+    app.globalData.quizResult = null;
+
+    this.setData({
+      investorType: type,
+      riskScore: score,
+      allocation: allocation,
+      typeDetail: typeAdvice[type] || null,
     });
   },
 
-  onShareAppMessage() {
+  onRetakeQuiz: function () {
+    wx.navigateTo({ url: '/pages/quiz/quiz' });
+  },
+
+  onShareAppMessage: function () {
     return { title: 'QPP - 你的智能理财助手', path: '/pages/index/index' };
   },
 });

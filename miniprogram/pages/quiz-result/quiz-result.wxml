@@ -1,25 +1,64 @@
 <view class="page">
   <view class="result-card">
-    <text class="result-title">测评结果</text>
-    <view class="result-type-row">
-      <text class="result-type">{{investorType}}</text>
-    </view>
-    <view class="result-score-row">
-      <text class="result-score">{{riskScore}}</text>
-      <text class="result-unit">分</text>
+    <text class="result-eyebrow">测评结果</text>
+    <text class="result-type">{{investorType}}</text>
+    <view class="score-row">
+      <text class="score-num">{{riskScore}}</text>
+      <text class="score-unit">分</text>
     </view>
     <view class="risk-bar">
       <view class="risk-fill" style="width: {{riskScore}}%;"></view>
     </view>
+    <view class="risk-labels">
+      <text>保守</text>
+      <text>稳健</text>
+      <text>进取</text>
+    </view>
+    <button class="retake-btn" bindtap="onRetakeQuiz">重新测评</button>
   </view>
 
-  <view class="allocation-card" wx:if="{{allocation.length}}">
-    <text class="section-title">建议资产配置</text>
-    <view class="alloc-item" wx:for="{{allocation}}" wx:key="name">
-      <text class="alloc-name">{{item.name}}</text>
-      <text class="alloc-pct">{{item.pct}}%</text>
+  <view class="alloc-section" wx:if="{{allocation.length}}">
+    <text class="section-heading">建议资产配置</text>
+    <view class="alloc-list">
+      <view class="alloc-row" wx:for="{{allocation}}" wx:key="name">
+        <text class="alloc-label">{{item.name}}</text>
+        <view class="alloc-bar-bg">
+          <view class="alloc-bar-fill" style="width: {{item.pct}}%;"></view>
+        </view>
+        <text class="alloc-pct">{{item.pct}}%</text>
+      </view>
     </view>
   </view>
 
-  <button class="sim-btn" bindtap="onStartSimulation">开始投资模拟</button>
+  <view class="advice-section" wx:if="{{typeDetail}}">
+    <text class="section-heading">投资建议</text>
+    <view class="advice-para" wx:for="{{typeDetail.advice}}" wx:key="*this">
+      <text class="advice-para-text">{{item}}</text>
+    </view>
+
+    <text class="advice-subhead">核心理念</text>
+    <view class="advice-tags">
+      <view class="advice-tag" wx:for="{{typeDetail.principles}}" wx:key="*this">
+        <text>{{item}}</text>
+      </view>
+    </view>
+
+    <text class="advice-subhead">适合的产品</text>
+    <view class="advice-tags">
+      <view class="advice-tag tag-green" wx:for="{{typeDetail.suitable}}" wx:key="*this">
+        <text>{{item}}</text>
+      </view>
+    </view>
+
+    <text class="advice-subhead">建议回避</text>
+    <view class="advice-tags">
+      <view class="advice-tag tag-red" wx:for="{{typeDetail.avoid}}" wx:key="*this">
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="disclaimer-bar">
+    <text class="disclaimer-note">以上内容仅供参考，不构成投资建议。市场有风险，投资需谨慎。</text>
+  </view>
 </view>

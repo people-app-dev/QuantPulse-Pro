@@ -1,6 +1,9 @@
 @import '/styles/design-tokens.wxss';
 
+page { background-color: var(--color-bg); }
+
 .page {
+  background-color: var(--color-bg);
   padding: var(--space-lg);
   min-height: 100vh;
   padding-bottom: 80px;
@@ -53,6 +56,13 @@
   color: rgba(255,255,255,0.9);
   line-height: 1.7;
 }
+.brief-tap-hint {
+  font-size: var(--font-small);
+  color: rgba(255,255,255,0.5);
+  display: block;
+  margin-top: var(--space-sm);
+  text-align: right;
+}
 
 /* Section */
 .section {
@@ -78,6 +88,7 @@
   background: var(--color-card);
   border-radius: var(--radius-card);
   padding: var(--space-md);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .forex-pair {
   font-size: var(--font-small);
@@ -102,6 +113,7 @@
   background: var(--color-card);
   border-radius: var(--radius-card);
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .index-item {
   display: flex;
@@ -134,11 +146,15 @@
   background: var(--color-card);
   border-radius: var(--radius-card);
   padding: var(--space-md) var(--space-lg);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .highlight-item {
   display: flex;
   gap: 8px;
-  padding: 6px 0;
+  padding: 8px 0;
+}
+.highlight-item:not(:last-child) {
+  border-bottom: 1px solid var(--color-bg);
 }
 .highlight-dot {
   color: var(--color-primary);
@@ -151,10 +167,18 @@
   line-height: 1.6;
   flex: 1;
 }
+.highlight-arrow {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
 
 /* Colors */
 .up { color: var(--color-success); }
 .down { color: var(--color-danger); }
+
+.disclaimer-row { text-align: center; padding: 8px 0 16px; }
+.disclaimer-text { font-size: 10px; color: var(--color-text-secondary); opacity: 0.7; }
 
 /* Update info */
 .update-info {

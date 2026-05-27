@@ -1,40 +1,239 @@
 <view class="page">
-  <view class="card" wx:if="{{!hasAssessment}}">
-    <text class="card-title">风险测评</text>
-    <text class="card-desc">完成风险测评，了解你的投资风险偏好，开启模拟投资之旅</text>
-    <button class="primary-btn" bindtap="onGoQuiz">开始测评</button>
+  <view class="search-bar">
+    <icon type="search" size="16" color="#8E8E93" class="search-icon"/>
+    <input
+      class="search-field"
+      placeholder="搜索金融概念..."
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      confirm-type="search"
+    />
+    <view wx:if="{{isSearching}}" class="search-clear" bindtap="onClearSearch">
+      <text class="clear-icon">✕</text>
+    </view>
   </view>
 
-  <block wx:else>
-    <view class="card risk-summary">
-      <text class="card-label">我的风险画像</text>
-      <view class="risk-row">
-        <text class="risk-type">{{investorType}}</text>
-        <text class="risk-score">{{riskScore}}分</text>
+  <scroll-view class="category-scroll" scroll-x="true" enhanced="true" show-scrollbar="{{false}}">
+    <view class="category-row">
+      <view class="cat-chip {{activeCategory == '' ? 'active' : ''}}" bindtap="onCategoryTap" data-category="全部">
+        <text>全部</text>
       </view>
-      <button class="retake-btn" bindtap="onGoQuiz">重新测评</button>
+      <view class="cat-chip {{activeCategory == '股票' ? 'active' : ''}}" bindtap="onCategoryTap" data-category="股票">
+        <text>股票</text>
+      </view>
+      <view class="cat-chip {{activeCategory == '基金' ? 'active' : ''}}" bindtap="onCategoryTap" data-category="基金">
+        <text>基金</text>
+      </view>
+      <view class="cat-chip {{activeCategory == '债券' ? 'active' : ''}}" bindtap="onCategoryTap" data-category="债券">
+        <text>债券</text>
+      </view>
+      <view class="cat-chip {{activeCategory == '宏观' ? 'active' : ''}}" bindtap="onCategoryTap" data-category="宏观">
+        <text>宏观</text>
+      </view>
+      <view class="cat-chip {{activeCategory == '理财' ? 'active' : ''}}" bindtap="onCategoryTap" data-category="理财">
+        <text>理财</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{isSearching}}" class="results-section">
+    <view wx:if="{{conceptLoading}}" class="loading-hint">
+      <text class="loading-text">搜索中...</text>
+    </view>
+    <block wx:if="{{!conceptLoading}}">
+      <text wx:if="{{searchResults.length > 0}}" class="results-count">找到 {{searchResults.length}} 个相关概念</text>
+      <view class="result-card" wx:for="{{searchResults}}" wx:key="id" bindtap="onConceptTap" data-id="{{item.id}}" data-index="{{index}}">
+        <view class="result-header">
+          <text class="result-badge {{item.category == '股票' ? 'cat-stock' : item.category == '基金' ? 'cat-fund' : item.category == '债券' ? 'cat-bond' : item.category == '宏观' ? 'cat-macro' : 'cat-finance'}}">{{item.category}}</text>
+          <text class="result-name">{{item.concept}}</text>
+        </view>
+        <text class="result-desc">{{item.short}}</text>
+      </view>
+      <view wx:if="{{searchResults.length == 0}}" class="empty-result">
+        <text class="empty-text">未找到相关概念</text>
+        <text class="empty-hint">试试其他关键词，如"市盈率"、"ETF"、"复利"等</text>
+      </view>
+    </block>
+  </view>
+
+  <view wx:if="{{!isSearching}}" class="content-split">
+    <view class="concepts-half">
+      <text class="section-label">{{activeCategory ? activeCategory + ' · 常见概念' : '常见概念'}}</text>
+      <view class="popular-grid">
+        <view class="popular-card" wx:for="{{popularConcepts}}" wx:key="id" wx:if="{{index < 6}}" bindtap="onConceptTap" data-id="{{item.id}}" data-index="{{index}}">
+          <text class="popular-cat {{item.category == '股票' ? 'cat-stock' : item.category == '基金' ? 'cat-fund' : item.category == '债券' ? 'cat-bond' : item.category == '宏观' ? 'cat-macro' : 'cat-finance'}}">{{item.category}}</text>
+          <text class="popular-name">{{item.concept}}</text>
+        </view>
+      </view>
+      <view wx:if="{{popularConcepts.length == 0}}" class="empty-result">
+        <text class="empty-text">该分类暂无概念</text>
+      </view>
     </view>
 
-    <view class="card sim-card">
-      <text class="card-title">投资模拟盘</text>
-      <view wx:if="{{hasSimulation && simData}}" class="sim-overview">
-        <view class="sim-stat">
-          <text class="sim-stat-value">{{simData.totalAssets}}</text>
-          <text class="sim-stat-label">总资产</text>
+    <view class="calc-half">
+      <text class="section-label">理财计算器</text>
+      <scroll-view class="calc-tools-row" scroll-x="true" enhanced="true" show-scrollbar="{{false}}">
+        <view class="calc-tool-chip {{calcTool == 'compound' ? 'active' : ''}}" bindtap="onCalcToolChange" data-tool="compound"><text>复利</text></view>
+        <view class="calc-tool-chip {{calcTool == 'dca' ? 'active' : ''}}" bindtap="onCalcToolChange" data-tool="dca"><text>定投</text></view>
+        <view class="calc-tool-chip {{calcTool == 'loan' ? 'active' : ''}}" bindtap="onCalcToolChange" data-tool="loan"><text>贷款</text></view>
+        <view class="calc-tool-chip {{calcTool == 'retirement' ? 'active' : ''}}" bindtap="onCalcToolChange" data-tool="retirement"><text>退休</text></view>
+        <view class="calc-tool-chip {{calcTool == 'inflation' ? 'active' : ''}}" bindtap="onCalcToolChange" data-tool="inflation"><text>通胀</text></view>
+      </scroll-view>
+
+      <view wx:if="{{calcTool == 'compound'}}" class="calc-panel">
+        <view class="form-card">
+          <view class="form-row">
+            <text class="form-label">本金（元）</text>
+            <input class="form-input" type="digit" placeholder="100,000" value="{{principal}}" bindinput="onFieldInput" data-field="principal" />
+          </view>
+          <view class="form-row">
+            <text class="form-label">年化收益率（%）</text>
+            <input class="form-input" type="digit" placeholder="8" value="{{annualRate}}" bindinput="onFieldInput" data-field="annualRate" />
+          </view>
+          <view class="form-row form-row-last">
+            <text class="form-label">投资年限</text>
+            <input class="form-input" type="number" placeholder="10" value="{{years}}" bindinput="onFieldInput" data-field="years" />
+          </view>
         </view>
-        <view class="sim-stat">
-          <text class="sim-stat-value">{{simData.cash}}</text>
-          <text class="sim-stat-label">可用资金</text>
-        </view>
-        <view class="sim-stat">
-          <text class="sim-stat-value">{{simData.holdingCount}}</text>
-          <text class="sim-stat-label">持仓数</text>
+        <button class="calc-btn" bindtap="onCalcCompound">计算</button>
+        <view wx:if="{{compoundResult}}" class="calc-result-card">
+          <text class="calc-result-label">最终本息合计</text>
+          <text class="calc-result-big">{{compoundResult.finalAmount}}</text>
+          <view class="calc-result-divider"></view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">总收益</text>
+            <text class="calc-result-val up">+{{compoundResult.profit}}</text>
+          </view>
         </view>
       </view>
-      <view wx:else class="sim-empty">
-        <text class="sim-empty-text">尚未开通模拟账户</text>
+
+      <view wx:if="{{calcTool == 'dca'}}" class="calc-panel">
+        <view class="form-card">
+          <view class="form-row">
+            <text class="form-label">每月定投（元）</text>
+            <input class="form-input" type="digit" placeholder="1,000" value="{{dcaAmount}}" bindinput="onFieldInput" data-field="dcaAmount" />
+          </view>
+          <view class="form-row">
+            <text class="form-label">年化收益率（%）</text>
+            <input class="form-input" type="digit" placeholder="8" value="{{dcaRate}}" bindinput="onFieldInput" data-field="dcaRate" />
+          </view>
+          <view class="form-row form-row-last">
+            <text class="form-label">定投年限</text>
+            <input class="form-input" type="number" placeholder="10" value="{{dcaYears}}" bindinput="onFieldInput" data-field="dcaYears" />
+          </view>
+        </view>
+        <button class="calc-btn" bindtap="onCalcDCA">计算</button>
+        <view wx:if="{{dcaResult}}" class="calc-result-card">
+          <text class="calc-result-label">最终市值</text>
+          <text class="calc-result-big">{{dcaResult.finalAmount}}</text>
+          <view class="calc-result-divider"></view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">总投入</text>
+            <text class="calc-result-val">{{dcaResult.totalInvested}}</text>
+          </view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">总收益</text>
+            <text class="calc-result-val up">+{{dcaResult.profit}}</text>
+          </view>
+        </view>
       </view>
-      <button class="primary-btn" bindtap="onGoSimulation">进入模拟盘</button>
+
+      <view wx:if="{{calcTool == 'loan'}}" class="calc-panel">
+        <view class="form-card">
+          <view class="form-row">
+            <text class="form-label">贷款总额（元）</text>
+            <input class="form-input" type="digit" placeholder="1,000,000" value="{{loanAmount}}" bindinput="onFieldInput" data-field="loanAmount" />
+          </view>
+          <view class="form-row">
+            <text class="form-label">年利率（%）</text>
+            <input class="form-input" type="digit" placeholder="4.5" value="{{loanRate}}" bindinput="onFieldInput" data-field="loanRate" />
+          </view>
+          <view class="form-row form-row-last">
+            <text class="form-label">还款月数</text>
+            <input class="form-input" type="number" placeholder="360" value="{{loanMonths}}" bindinput="onFieldInput" data-field="loanMonths" />
+          </view>
+        </view>
+        <button class="calc-btn" bindtap="onCalcLoan">计算</button>
+        <view wx:if="{{loanResult}}" class="calc-result-card">
+          <text class="calc-result-label">每月还款</text>
+          <text class="calc-result-big">{{loanResult.monthly}}</text>
+          <view class="calc-result-divider"></view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">还款总额</text>
+            <text class="calc-result-val">{{loanResult.totalPayment}}</text>
+          </view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">总利息</text>
+            <text class="calc-result-val down">{{loanResult.interest}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{calcTool == 'retirement'}}" class="calc-panel">
+        <view class="form-card">
+          <view class="form-row">
+            <text class="form-label">当前储蓄（元）</text>
+            <input class="form-input" type="digit" placeholder="100,000" value="{{retireCurrent}}" bindinput="onFieldInput" data-field="retireCurrent" />
+          </view>
+          <view class="form-row">
+            <text class="form-label">每月存入（元）</text>
+            <input class="form-input" type="digit" placeholder="2,000" value="{{retireMonthly}}" bindinput="onFieldInput" data-field="retireMonthly" />
+          </view>
+          <view class="form-row">
+            <text class="form-label">年化收益率（%）</text>
+            <input class="form-input" type="digit" placeholder="6" value="{{retireRate}}" bindinput="onFieldInput" data-field="retireRate" />
+          </view>
+          <view class="form-row form-row-last">
+            <text class="form-label">离退休年数</text>
+            <input class="form-input" type="number" placeholder="30" value="{{retireYears}}" bindinput="onFieldInput" data-field="retireYears" />
+          </view>
+        </view>
+        <button class="calc-btn" bindtap="onCalcRetirement">计算</button>
+        <view wx:if="{{retireResult}}" class="calc-result-card">
+          <text class="calc-result-label">退休总资产</text>
+          <text class="calc-result-big">{{retireResult.total}}</text>
+          <view class="calc-result-divider"></view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">总投入</text>
+            <text class="calc-result-val">{{retireResult.contributed}}</text>
+          </view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">投资增长</text>
+            <text class="calc-result-val up">+{{retireResult.growth}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{calcTool == 'inflation'}}" class="calc-panel">
+        <view class="form-card">
+          <view class="form-row">
+            <text class="form-label">当前金额（元）</text>
+            <input class="form-input" type="digit" placeholder="10,000" value="{{inflateAmount}}" bindinput="onFieldInput" data-field="inflateAmount" />
+          </view>
+          <view class="form-row">
+            <text class="form-label">年通胀率（%）</text>
+            <input class="form-input" type="digit" placeholder="3" value="{{inflateRate}}" bindinput="onFieldInput" data-field="inflateRate" />
+          </view>
+          <view class="form-row form-row-last">
+            <text class="form-label">年数</text>
+            <input class="form-input" type="number" placeholder="20" value="{{inflateYears}}" bindinput="onFieldInput" data-field="inflateYears" />
+          </view>
+        </view>
+        <button class="calc-btn" bindtap="onCalcInflation">计算</button>
+        <view wx:if="{{inflateResult}}" class="calc-result-card">
+          <text class="calc-result-label">未来等价金额</text>
+          <text class="calc-result-big">{{inflateResult.futureValue}}</text>
+          <view class="calc-result-divider"></view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">价值损失</text>
+            <text class="calc-result-val down">{{inflateResult.lostValue}}</text>
+          </view>
+          <view class="calc-result-row">
+            <text class="calc-result-key">当前购买力</text>
+            <text class="calc-result-val">{{inflateResult.purchasePower}}</text>
+          </view>
+        </view>
+      </view>
     </view>
-  </block>
+  </view>
 </view>

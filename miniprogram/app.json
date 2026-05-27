@@ -1,12 +1,13 @@
 {
   "pages": [
+    "pages/login/login",
     "pages/index/index",
     "pages/invest/invest",
     "pages/mine/mine",
     "pages/quiz/quiz",
     "pages/quiz-result/quiz-result",
-    "pages/simulation/simulation",
-    "pages/calculator/calculator"
+    "pages/brief-detail/brief-detail",
+    "pages/concept-detail/concept-detail"
   ],
   "window": {
     "navigationBarTitleText": "QPP",
