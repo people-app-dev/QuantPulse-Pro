@@ -3,7 +3,7 @@
     <icon type="search" size="16" color="#8E8E93" class="search-icon"/>
     <input
       class="search-field"
-      placeholder="搜索金融概念..."
+      placeholder="搜索财经知识..."
       value="{{searchKeyword}}"
       bindinput="onSearchInput"
       confirm-type="search"

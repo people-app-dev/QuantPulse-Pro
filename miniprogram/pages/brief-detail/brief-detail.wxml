@@ -5,8 +5,8 @@
 
   <block wx:if="{{!loading && brief}}">
     <view class="hero-card">
-      <text class="hero-tag">市场简报</text>
-      <text class="hero-title">全球市场日报</text>
+      <text class="hero-tag">市场观察</text>
+      <text class="hero-title">每日市场观察</text>
       <view class="hero-meta">
         <text class="hero-date">{{brief.date}}</text>
         <text class="hero-time">更新于 {{brief.updateTime || '--'}}</text>
@@ -33,7 +33,7 @@
 
     <view class="section-card">
       <view class="section-header-row">
-        <text class="section-label">市场要闻</text>
+        <text class="section-label">市场动态</text>
         <text class="toggle-btn" bindtap="onToggleAll">{{expandAll ? '收起全部' : '展开全部'}}</text>
       </view>
       <view

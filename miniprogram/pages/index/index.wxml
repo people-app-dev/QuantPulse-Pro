@@ -10,7 +10,7 @@
 
   <block wx:if="{{!loading && brief}}">
     <view class="brief-card" bindtap="onBriefTap">
-      <text class="brief-label">今日简报</text>
+      <text class="brief-label">今日观察</text>
       <text class="brief-summary">{{brief.summary}}</text>
       <text class="brief-tap-hint">点击查看详情 ›</text>
     </view>
@@ -38,7 +38,7 @@
     </view>
 
     <view class="section">
-      <text class="section-title">市场要闻</text>
+      <text class="section-title">市场动态</text>
       <view class="highlight-list">
         <view class="highlight-item" wx:for="{{brief.highlights}}" wx:key="title" bindtap="onHighlightTap" data-index="{{index}}">
           <text class="highlight-dot">●</text>

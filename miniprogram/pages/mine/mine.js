@@ -185,6 +185,6 @@ Page({
   },
 
   onShareAppMessage: function () {
-    return { title: 'QPP - 你的智能理财助手', path: '/pages/index/index' };
+    return { title: 'QPP - 财经知识助手', path: '/pages/index/index' };
   },
 });

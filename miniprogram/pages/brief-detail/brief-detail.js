@@ -105,6 +105,6 @@ Page({
   },
 
   onShareAppMessage() {
-    return { title: 'QPP - 全球市场简报', path: '/pages/index/index' };
+    return { title: 'QPP - 每日市场观察', path: '/pages/index/index' };
   },
 });

@@ -1,7 +1,7 @@
 <view class="page">
   <view class="brand">
     <text class="brand-name">QPP</text>
-    <text class="brand-sub">智能理财助手</text>
+    <text class="brand-sub">财经知识助手</text>
   </view>
 
   <!-- Mode tabs -->

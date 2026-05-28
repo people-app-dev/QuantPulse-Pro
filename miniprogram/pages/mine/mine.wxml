@@ -1,7 +1,7 @@
 <view class="page">
   <!-- Guest banner -->
   <view class="guest-banner" wx:if="{{!accountPhone}}">
-    <text class="guest-hint">登录后可查看个人数据和投资建议</text>
+    <text class="guest-hint">登录后可查看个人测评和学习参考</text>
     <button class="guest-btn" bindtap="onGoLogin">去登录</button>
   </view>
 
@@ -21,12 +21,12 @@
       <text class="type-name">{{investorType}}</text>
       <text class="type-score">{{riskScore}}分</text>
     </view>
-    <text class="profile-subtitle muted" wx:else>完成测评，获取投资建议</text>
+    <text class="profile-subtitle muted" wx:else>完成测评，获取学习参考</text>
   </view>
 
   <block wx:if="{{investorType}}">
     <view class="allocation-card">
-      <text class="card-heading">建议配置</text>
+      <text class="card-heading">示例配置</text>
       <view class="allocation-bar" wx:for="{{allocation}}" wx:key="name">
         <view class="bar-header">
           <text>{{item.name}}</text>
@@ -40,19 +40,19 @@
     </view>
 
     <view class="advice-card" wx:if="{{typeDetail}}">
-      <text class="card-heading">投资建议</text>
+      <text class="card-heading">学习参考</text>
       <view class="advice-para" wx:for="{{typeDetail.advice}}" wx:key="*this">
         <text class="advice-para-text">{{item}}</text>
       </view>
-      <text class="advice-subhead">核心理念</text>
+      <text class="advice-subhead">基本原则</text>
       <view class="advice-tags">
         <view class="advice-tag" wx:for="{{typeDetail.principles}}" wx:key="*this"><text>{{item}}</text></view>
       </view>
-      <text class="advice-subhead">适合的产品</text>
+      <text class="advice-subhead">常见品种</text>
       <view class="advice-tags">
         <view class="advice-tag tag-green" wx:for="{{typeDetail.suitable}}" wx:key="*this"><text>{{item}}</text></view>
       </view>
-      <text class="advice-subhead">建议回避</text>
+      <text class="advice-subhead">需谨慎对待</text>
       <view class="advice-tags">
         <view class="advice-tag tag-red" wx:for="{{typeDetail.avoid}}" wx:key="*this"><text>{{item}}</text></view>
       </view>
